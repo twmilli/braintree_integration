@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://js.braintreegateway.com/web/dropin/1.1.0/js/dropin.min.js"></script>
+    <title>New Transaction</title>
+  </head>
+  <body>
+    <h1>Hi, Let's Test a transaction</h1>
+    <p>Make a test payment with Braintree using PayPal or a card</p>
+    <form class="payment-form" action="/checkouts" method="post">
+      <input type="number" name="cardnum" placeholder="Card Number" value="">
+      <input type="text" name="exp" value="" placeholder="Expiration Date">
+      <input type="number" name="amount" value="10">
+    </form>
+    <div id="dropin-container"></div>
+      <button id="submit-button">Request payment method</button>
+      <script>
+        var button = document.querySelector('#submit-button');
+
+        braintree.dropin.create({
+          authorization: 'CLIENT_TOKEN_FROM_SERVER',
+          container: '#dropin-container'
+        }, function (createErr, instance) {
+          button.addEventListener('click', function () {
+            instance.requestPaymentMethod(function (err, payload) {
+              // Submit payload.nonce to your server
+            });
+          });
+        });
+      </script>
+  </body>
+</html>
