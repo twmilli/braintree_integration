@@ -9,7 +9,10 @@ router.get('/', (req, res) => {
 });
 
 router.get('/checkouts/new', (req, res) => {
-  res.render('new.ejs', {clientToken: res.clientToken});
+  gateway.clientToken.generate({}, (err, response) => {
+    res.render('new.ejs', {clientToken: response.clientToken});
+  });
+
 });
 
 router.get('/checkouts/:id', (req, res) => {
@@ -21,6 +24,17 @@ router.get('/checkouts/:id', (req, res) => {
     res.render('checkouts/show', {transaction, result});
   });
 });
+
+const formatErrors = (errors) => {
+    let formattedErrors = '';
+
+    for (var i in errors) { // eslint-disable-line no-inner-declarations, vars-on-top
+          if (errors.hasOwnProperty(i)) {
+                  formattedErrors += 'Error: ' + errors[i].code + ': ' + errors[i].message + '\n';
+                }
+        }
+    return formattedErrors;
+}
 
 router.post('/checkouts', (req, res) => {
   let transactionErrors;
@@ -44,10 +58,5 @@ router.post('/checkouts', (req, res) => {
   });
 });
 
-router.get('/client_token', (req,res) => {
-  gateway.clientToken.generate({}, (err, response) => {
-    res.send(response.clientToken);
-  });
-});
 
 export default router;

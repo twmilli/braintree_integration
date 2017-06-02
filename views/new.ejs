@@ -8,18 +8,14 @@
   <body>
     <h1>Hi, Let's Test a transaction</h1>
     <p>Make a test payment with Braintree using PayPal or a card</p>
-    <form class="payment-form" action="/checkouts" method="post">
-      <input type="number" name="cardnum" placeholder="Card Number" value="">
-      <input type="text" name="exp" value="" placeholder="Expiration Date">
-      <input type="number" name="amount" value="10">
-    </form>
-    <div id="dropin-container"></div>
+   <div id="dropin-container"></div>
       <button id="submit-button">Request payment method</button>
       <script>
         var button = document.querySelector('#submit-button');
 
+        console.log('CLIENT_TOKEN: <%- clientToken %>');
         braintree.dropin.create({
-          authorization: 'CLIENT_TOKEN_FROM_SERVER',
+          authorization:'<%- clientToken %>',
           container: '#dropin-container'
         }, function (createErr, instance) {
           button.addEventListener('click', function () {
